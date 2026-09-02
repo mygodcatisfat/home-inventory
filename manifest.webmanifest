@@ -1,0 +1,44 @@
+{
+  "name": "家庭用品管理",
+  "short_name": "家庭用品",
+  "description": "找得到、不重複買、不過期。家中生活用品的存放位置、庫存狀態與效期管理。",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "id": "home-inventory",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#eff3f8",
+  "theme_color": "#1a365d",
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "購物清單",
+      "short_name": "購物",
+      "description": "看現在缺什麼",
+      "url": "./?tab=shopping",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
