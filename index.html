@@ -20,12 +20,25 @@
 
 /* 停用畫面縮放。
    iOS Safari 從 iOS 10 起刻意忽略 viewport 的 user-scalable=no，
-   必須另外攔截 WebKit 專屬的 gesture 事件才擋得住雙指縮放；
-   雙擊縮放則交給 CSS 的 touch-action 處理。
-   立體圖的雙指縮放走的是 Pointer Events，不受影響。 */
+   必須另外攔截 WebKit 專屬的 gesture 事件才擋得住雙指縮放。
+   立體圖的雙指縮放走的是 Pointer Events，不受影響。
+
+   雙擊縮放原本用 CSS 的 `touch-action` 擋，但把它設在 html 根元素上
+   會干擾 WebKit 的原生捲動合成，導致 sticky 頁首在捲動時偶發性地
+   跟下方內容對不齊（頁首疊到篩選列上面）。改成偵測「兩次點擊間隔
+   小於 300ms 就視為雙擊」，只攔截雙擊手勢本身，完全不影響捲動。 */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
   document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
 });
+
+(function () {
+  var lastTouchEnd = 0;
+  document.addEventListener('touchend', function (e) {
+    var now = Date.now();
+    if (now - lastTouchEnd <= 300) e.preventDefault();
+    lastTouchEnd = now;
+  }, { passive: false });
+})();
 </script>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a365d' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M3 8.5 12 4l9 4.5v7L12 20l-9-4.5z'/><path d='M3 8.5 12 13l9-4.5M12 13v7'/></svg>" />
@@ -38,8 +51,8 @@
 <meta name="apple-mobile-web-app-title" content="家庭用品" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="description" content="找得到、不重複買、不過期。家中生活用品的存放位置、庫存狀態與效期管理。" />
-  <script type="module" crossorigin src="/home-inventory/assets/index-DoLnXJiE.js"></script>
-  <link rel="stylesheet" crossorigin href="/home-inventory/assets/index-DRWMCzkL.css">
+  <script type="module" crossorigin src="/home-inventory/assets/index-mcaCTPP8.js"></script>
+  <link rel="stylesheet" crossorigin href="/home-inventory/assets/index-CuUlvvhc.css">
 </head>
 <body>
   <div id="app" class="app"></div>
