@@ -2,7 +2,7 @@
 <html lang="zh-Hant" data-theme="light">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <meta name="theme-color" content="#1a365d" />
 <title>家庭用品管理</title>
 
@@ -17,6 +17,15 @@
                   : window.matchMedia('(prefers-color-scheme: dark)').matches;
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
 })();
+
+/* 停用畫面縮放。
+   iOS Safari 從 iOS 10 起刻意忽略 viewport 的 user-scalable=no，
+   必須另外攔截 WebKit 專屬的 gesture 事件才擋得住雙指縮放；
+   雙擊縮放則交給 CSS 的 touch-action 處理。
+   立體圖的雙指縮放走的是 Pointer Events，不受影響。 */
+['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
+  document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
+});
 </script>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a365d' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M3 8.5 12 4l9 4.5v7L12 20l-9-4.5z'/><path d='M3 8.5 12 13l9-4.5M12 13v7'/></svg>" />
@@ -29,8 +38,8 @@
 <meta name="apple-mobile-web-app-title" content="家庭用品" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="description" content="找得到、不重複買、不過期。家中生活用品的存放位置、庫存狀態與效期管理。" />
-  <script type="module" crossorigin src="/home-inventory/assets/index-OI6-_DmO.js"></script>
-  <link rel="stylesheet" crossorigin href="/home-inventory/assets/index-KMzW9Ttm.css">
+  <script type="module" crossorigin src="/home-inventory/assets/index-TC5H0V7w.js"></script>
+  <link rel="stylesheet" crossorigin href="/home-inventory/assets/index-DRWMCzkL.css">
 </head>
 <body>
   <div id="app" class="app"></div>
