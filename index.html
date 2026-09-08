@@ -5,41 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <meta name="theme-color" content="#1a365d" />
 <title>家庭用品管理</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://oyhscnaljckjnyypjfxa.supabase.co; font-src 'self'; connect-src 'self' https://oyhscnaljckjnyypjfxa.supabase.co wss://oyhscnaljckjnyypjfxa.supabase.co; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests" />
 
-<!-- 主題判斷必須在任何 style 之前同步執行，避免載入時閃爍（FOUC）。
-     localStorage 存取單獨包 try/catch：讀不到偏好時要能優雅退回「跟隨系統」，
-     而不是連帶跳過設定 data-theme 這件事本身。 -->
-<script>
-(function () {
-  var pref = null;
-  try { pref = localStorage.getItem('theme'); } catch (e) { /* 環境禁用 storage */ }
-  var dark = pref ? pref === 'dark'
-                  : window.matchMedia('(prefers-color-scheme: dark)').matches;
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-})();
-
-/* 停用畫面縮放。
-   iOS Safari 從 iOS 10 起刻意忽略 viewport 的 user-scalable=no，
-   必須另外攔截 WebKit 專屬的 gesture 事件才擋得住雙指縮放。
-   立體圖的雙指縮放走的是 Pointer Events，不受影響。
-
-   雙擊縮放原本用 CSS 的 `touch-action` 擋，但把它設在 html 根元素上
-   會干擾 WebKit 的原生捲動合成，導致 sticky 頁首在捲動時偶發性地
-   跟下方內容對不齊（頁首疊到篩選列上面）。改成偵測「兩次點擊間隔
-   小於 300ms 就視為雙擊」，只攔截雙擊手勢本身，完全不影響捲動。 */
-['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
-  document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
-});
-
-(function () {
-  var lastTouchEnd = 0;
-  document.addEventListener('touchend', function (e) {
-    var now = Date.now();
-    if (now - lastTouchEnd <= 300) e.preventDefault();
-    lastTouchEnd = now;
-  }, { passive: false });
-})();
-</script>
+<!-- 開機腳本：主題判斷與縮放攔截，必須在任何 CSS 之前同步執行。
+     刻意放在外部檔案而非內嵌，這樣 CSP 才能鎖成 script-src 'self'。 -->
+<script src="./boot.js"></script>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a365d' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M3 8.5 12 4l9 4.5v7L12 20l-9-4.5z'/><path d='M3 8.5 12 13l9-4.5M12 13v7'/></svg>" />
 
